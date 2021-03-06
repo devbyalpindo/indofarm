@@ -1,9 +1,11 @@
 part of 'services.dart';
 
 class AuthServices {
-
   // static final String _loginURL = siteURL + '/api/auth/login';
-  static final String _registerURL = siteURL + '/api/auth/register';
+  static final String _registerURL =
+      'http://developbyalpindo.site/api/auth/register';
+
+  static final String _loginURL = 'http://developbyalpindo.site/api/auth/login';
 
   static Future<ResponseHandler> signUp(Auth auth) async {
     FormData registerData = FormData.fromMap({
@@ -13,16 +15,17 @@ class AuthServices {
       'phone_number': auth.phoneNumber,
     });
 
-    final response = await Dio().post(_registerURL, data: registerData, options: Options(followRedirects: false, validateStatus: (status) { return status < 500; }));
+    final response = await Dio().post(_registerURL,
+        data: registerData,
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }));
     final json = response.data;
 
     if (response.statusCode == 200) {
       User user = User.fromJson(json['user']);
-
-      // SharedPreferences preferences = await SharedPreferences.getInstance();
-      // preferences.setString('token', json['token']);
-      // preferences.setInt('id', json['user']['id']);
-
       return ResponseHandler(
         user: user,
         message: json['message'],
@@ -44,6 +47,37 @@ class AuthServices {
     } else {
       return ResponseHandler(
         errors: "Email has already registered",
+      );
+    }
+  }
+
+  static Future<ResponseHandler> signIn(Auth auth) async {
+    final Map<String, dynamic> bodyLogin = {
+      "email": auth.email,
+      "password": auth.password
+    };
+
+    final response = await Dio().post(_loginURL, data: bodyLogin);
+    final json = response.data;
+
+    if (response.statusCode == 200) {
+      User user = User.fromJson(json['user']);
+
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('token', json['token']);
+      preferences.setInt('id', json['user']['id']);
+
+      return ResponseHandler(
+        user: user,
+        message: json['message'],
+      );
+    } else if (response.statusCode == 422) {
+      return ResponseHandler(
+        message: "Please enter valid email",
+      );
+    } else {
+      return ResponseHandler(
+        message: "Email or Password is Wrong",
       );
     }
   }

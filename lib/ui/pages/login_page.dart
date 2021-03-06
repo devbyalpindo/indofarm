@@ -5,8 +5,10 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-TextEditingController _usernameController = TextEditingController();
+TextEditingController _emailController = TextEditingController();
 TextEditingController _passwordController = TextEditingController();
+
+bool isSignIn = false;
 
 class _LoginPageState extends State<LoginPage> {
   @override
@@ -42,9 +44,9 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: defaultMargin),
                       child: TextFieldWidget(
-                        icons: Icon(Icons.perm_identity),
-                        controller: _usernameController,
-                        hintText: "Type your username",
+                        icons: Icon(Icons.alternate_email),
+                        controller: _emailController,
+                        hintText: "Type your email",
                       ),
                     ),
                     SizedBox(
@@ -64,19 +66,68 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-                      child: ButtonWidget(
-                        "Masuk",
-                        width: deviceWidth(context),
-                        height: deviceHeight(context) * 0.07,
-                        color: yellowColor1,
-                        topLeft: 20,
-                        topRight: 20,
-                        bottomLeft: 20,
-                        bottomRight: 20,
-                        onPressed: () {
-                          context.read<PageBloc>().add(GoToMainPage());
-                        },
-                      ),
+                      child: (isSignIn)
+                          ? SpinKitFadingCircle(color: yellowColor1)
+                          : ButtonWidget(
+                              "Masuk",
+                              width: deviceWidth(context),
+                              height: deviceHeight(context) * 0.07,
+                              color: yellowColor1,
+                              topLeft: 20,
+                              topRight: 20,
+                              bottomLeft: 20,
+                              bottomRight: 20,
+                              onPressed: () async {
+                                if (!(_emailController.text.trim() != "" &&
+                                    _passwordController.text.trim() != "")) {
+                                  Flushbar(
+                                    duration: Duration(milliseconds: 1500),
+                                    flushbarPosition: FlushbarPosition.TOP,
+                                    backgroundColor: Colors.redAccent,
+                                    message: "Please fill all the fields",
+                                  )..show(context);
+                                } else if (!EmailValidator.validate(
+                                    _emailController.text.trim())) {
+                                  Flushbar(
+                                    duration: Duration(milliseconds: 1500),
+                                    flushbarPosition: FlushbarPosition.TOP,
+                                    backgroundColor: Colors.redAccent,
+                                    message: "Please enter valid email",
+                                  )..show(context);
+                                } else {
+                                  setState(() {
+                                    isSignIn = true;
+                                  });
+
+                                  print(_emailController.text);
+                                  print(_passwordController.text);
+
+                                  ResponseHandler result =
+                                      await AuthServices.signIn(
+                                    Auth(
+                                        email: _emailController.text,
+                                        password: _passwordController.text),
+                                  );
+
+                                  if (result.user != null) {
+                                    context
+                                        .read<PageBloc>()
+                                        .add(GoToMainPage());
+                                  } else {
+                                    setState(() {
+                                      isSignUp = false;
+                                    });
+
+                                    Flushbar(
+                                      duration: Duration(milliseconds: 1500),
+                                      flushbarPosition: FlushbarPosition.TOP,
+                                      backgroundColor: Colors.redAccent,
+                                      message: result.message,
+                                    )..show(context);
+                                  }
+                                }
+                              },
+                            ),
                     ),
                     SizedBox(
                       height: deviceHeight(context) * 0.02,
@@ -89,11 +140,12 @@ class _LoginPageState extends State<LoginPage> {
                           style: whiteFont.copyWith(fontSize: 15),
                         ),
                         GestureDetector(
-                          onTap: (){
-                            context.read<PageBloc>().add(GoToRegisterPage());
-                          },
-                          child: Text("Daftar", style: yellowFont.copyWith(fontSize: 15, fontWeight: FontWeight.bold))
-                        )
+                            onTap: () {
+                              context.read<PageBloc>().add(GoToRegisterPage());
+                            },
+                            child: Text("Daftar",
+                                style: yellowFont.copyWith(
+                                    fontSize: 15, fontWeight: FontWeight.bold)))
                       ],
                     )
                   ],

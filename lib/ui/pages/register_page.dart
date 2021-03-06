@@ -93,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: defaultMargin),
                       child: (isSignUp)
-                          ? SpinKitFadingCircle(color: mainColor)
+                          ? SpinKitFadingCircle(color: yellowColor1)
                           : ButtonWidget(
                               "Daftar",
                               width: deviceWidth(context),
@@ -134,20 +134,28 @@ class _RegisterPageState extends State<RegisterPage> {
                                   setState(() {
                                     isSignUp = true;
                                   });
+
                                   ResponseHandler result =
                                       await AuthServices.signUp(
                                     Auth(
-                                      name: nameController.text,
-                                      email: emailController.text,
-                                      phoneNumber: phoneController.text,
-                                      password: passwordController.text,
-                                    ),
+                                        name: nameController.text,
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                        phoneNumber: phoneController.text),
                                   );
 
                                   if (result.user != null) {
                                     context
                                         .read<PageBloc>()
                                         .add(GoToLoginPage());
+
+                                    Flushbar(
+                                      duration: Duration(milliseconds: 5000),
+                                      flushbarPosition: FlushbarPosition.TOP,
+                                      backgroundColor: Colors.greenAccent,
+                                      message:
+                                          "Register Success, Please Login.",
+                                    )..show(context);
                                   } else {
                                     setState(() {
                                       isSignUp = false;
