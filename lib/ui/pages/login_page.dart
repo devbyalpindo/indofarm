@@ -107,8 +107,6 @@ class _LoginPageState extends State<LoginPage> {
                                         password: _passwordController.text),
                                   );
 
-                                  print(result.message);
-
                                   if (result.user != null) {
                                     context
                                         .read<PageBloc>()
@@ -116,7 +114,10 @@ class _LoginPageState extends State<LoginPage> {
                                     
                                     setState(() {
                                       isSignIn = false;
+                                      _emailController.text = "";
+                                      _passwordController.text = "";
                                     });
+                                    
                                   } else {
                                     setState(() {
                                       isSignIn = false;
