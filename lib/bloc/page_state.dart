@@ -28,3 +28,21 @@ class OnMainPage extends PageState {
   @override
   List<Object> get props => [bottomNavBarIndex];
 }
+
+class OnNewsDetailPage extends PageState {
+  final NewsModel news;
+
+  OnNewsDetailPage(this.news);
+
+  @override
+  List<Object> get props => [news];
+}
+
+class OnImageDetailPage extends PageState {
+  final GaleryModel galery;
+
+  OnImageDetailPage(this.galery);
+
+  @override
+  List<Object> get props => [galery];
+}

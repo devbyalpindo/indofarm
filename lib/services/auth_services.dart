@@ -2,12 +2,12 @@ part of 'services.dart';
 
 class AuthServices {
   // static final String _loginURL = siteURL + '/api/auth/login';
-  static final String _registerURL =
-      'http://developbyalpindo.site/api/auth/register';
+  static final String _registerURL = siteURL+'auth/register';
 
-  static final String _loginURL = 'http://developbyalpindo.site/api/auth/login';
+  static final String _loginURL = siteURL + 'auth/login';
 
   static Future<ResponseHandler> signUp(Auth auth) async {
+
     FormData registerData = FormData.fromMap({
       'name': auth.name,
       'email': auth.email,
@@ -57,7 +57,11 @@ class AuthServices {
       "password": auth.password
     };
 
-    final response = await Dio().post(_loginURL, data: bodyLogin);
+    final response = await Dio().post(_loginURL, data: bodyLogin, options: Options(
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }));
     final json = response.data;
 
     if (response.statusCode == 200) {
@@ -81,4 +85,12 @@ class AuthServices {
       );
     }
   }
+
+
+  static Future<void> signOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.remove('token');
+    preferences.remove('id');
+  }
+  
 }

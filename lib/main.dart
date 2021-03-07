@@ -15,6 +15,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => PageBloc()),
+        BlocProvider(create: (_) => GaleryBloc()..add(FetchGalery())),
+        BlocProvider(create: (_) => DictionaryBloc()..add(FetchDictionary())),
+        BlocProvider(create: (_) => NewsBloc()..add(FetchNews()))
       ],
       child: MaterialApp(
         //* Calling theme data from theme state

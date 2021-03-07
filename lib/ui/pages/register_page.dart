@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: TextFieldWidget(
                         icons: Icon(Icons.perm_identity),
                         controller: nameController,
-                        hintText: "Type your username",
+                        hintText: "Type your name",
                       ),
                     ),
                     SizedBox(

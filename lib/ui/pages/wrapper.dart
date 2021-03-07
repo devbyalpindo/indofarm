@@ -15,6 +15,10 @@ class Wrapper extends StatelessWidget {
       ? RegisterPage() 
       : (pageState is OnMainPage)
       ? MainPage(bottomNavBarIndex: pageState.bottomNavBarIndex)
+      : (pageState is OnNewsDetailPage)
+      ? NewsDetailPage(pageState.news)
+      : (pageState is OnImageDetailPage)
+      ? DetailImagePage(pageState.galery)
       : Container()
     );
   }

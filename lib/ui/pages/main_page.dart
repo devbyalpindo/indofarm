@@ -38,7 +38,6 @@ class _MainPageState extends State<MainPage> {
                 });
               },
               children: <Widget>[
-                HomePage(),
                 GaleryPage(),
                 DictionaryPage(),
                 NewsPage(),
@@ -72,23 +71,13 @@ class _MainPageState extends State<MainPage> {
           }),
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
-              icon: Icon(Icons.home, color: mainColor),
-              title: Text(
-                'Dashboard',
-                style: purpleFont.copyWith(
-                    fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              activeColor: yellowColor1,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
               icon: Icon(Icons.insert_photo, color: mainColor),
               title: Text(
                 'Galeri',
                 style: purpleFont.copyWith(
                     fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              activeColor: yellowColor1,
+              activeColor: mainColor,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
@@ -98,7 +87,7 @@ class _MainPageState extends State<MainPage> {
                 style: purpleFont.copyWith(
                     fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              activeColor: yellowColor1,
+              activeColor: mainColor,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
@@ -108,7 +97,7 @@ class _MainPageState extends State<MainPage> {
                 style: purpleFont.copyWith(
                     fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              activeColor: yellowColor1,
+              activeColor: mainColor,
               textAlign: TextAlign.center,
             ),
           ],

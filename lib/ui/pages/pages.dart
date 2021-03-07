@@ -11,6 +11,7 @@ import 'package:indofarm/model/model.dart';
 import 'package:indofarm/services/services.dart';
 import 'package:indofarm/shared/shared.dart';
 import 'package:indofarm/ui/widget/widget.dart';
+import 'package:search_widget/search_widget.dart';
 
 part 'login_page.dart';
 part 'register_page.dart';
@@ -20,4 +21,5 @@ part 'main_page.dart';
 part 'dictionary_page.dart';
 part 'galery_page.dart';
 part 'news_page.dart';
-part 'home_page.dart';
+part 'detail_news_page.dart';
+part 'detail_image_page.dart';

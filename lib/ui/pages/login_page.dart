@@ -46,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextFieldWidget(
                         icons: Icon(Icons.alternate_email),
                         controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
                         hintText: "Type your email",
                       ),
                     ),
@@ -99,9 +100,6 @@ class _LoginPageState extends State<LoginPage> {
                                     isSignIn = true;
                                   });
 
-                                  print(_emailController.text);
-                                  print(_passwordController.text);
-
                                   ResponseHandler result =
                                       await AuthServices.signIn(
                                     Auth(
@@ -109,13 +107,19 @@ class _LoginPageState extends State<LoginPage> {
                                         password: _passwordController.text),
                                   );
 
+                                  print(result.message);
+
                                   if (result.user != null) {
                                     context
                                         .read<PageBloc>()
                                         .add(GoToMainPage());
+                                    
+                                    setState(() {
+                                      isSignIn = false;
+                                    });
                                   } else {
                                     setState(() {
-                                      isSignUp = false;
+                                      isSignIn = false;
                                     });
 
                                     Flushbar(
@@ -124,6 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                                       backgroundColor: Colors.redAccent,
                                       message: result.message,
                                     )..show(context);
+
+
                                   }
                                 }
                               },
